@@ -9,6 +9,8 @@ export const schema = z.object({
 export type InputType = z.infer<typeof schema>;
 export type OutputType = {text: string};
 export const postRewrite = async (body: InputType,init?: RequestInit): Promise<OutputType> => {
+  if(import.meta.env.MODE === "github-pages")
+    throw Object.assign(new Error("ИИ ещё не подключён. Текст и графики можно редактировать вручную."),{code:"AI_NOT_CONFIGURED",status:503});
   const input = schema.safeParse(body);
   if(!input.success) throw new Error(input.error.issues[0]?.message || "Проверьте текст и задачу.");
   let response: Response;

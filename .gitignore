@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-pages/
 .sites-build/
 .sites-runtime/
 sites/generated-assets.ts

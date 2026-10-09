@@ -12,6 +12,7 @@ import { useEditorTools } from "../helpers/useEditorTools";
 import styles from "./_index.module.css";
 
 type Proposal = {id: string; identity: string; base: string; text: string};
+const githubPages = import.meta.env.MODE === "github-pages";
 export default function EditorPage() {
   const [model,setModel] = useState(() => new HtmlTextDocument(sampleDocument));
   const [frameHtml,setFrameHtml] = useState(() => model.preview());
@@ -217,7 +218,7 @@ export default function EditorPage() {
   }
   const validProposal=proposal?.id===selectedId && proposal?.identity===model.identity && proposal?.base===selected?.text;
   return <div className={styles.app}>
-    <><title>Текст на странице — визуальный редактор HTML</title><meta name="description" content="Меняйте текст в HTML-странице вручную и с помощью ИИ. Без кода, с сохранением оформления."/></>
+    <><title>Текст на странице — визуальный редактор HTML</title><meta name="description" content={githubPages ? "Меняйте текст и данные графиков в HTML без кода, с сохранением оформления." : "Меняйте текст в HTML-странице вручную и с помощью ИИ. Без кода, с сохранением оформления."}/></>
     <header className={styles.header}>
       <div className={styles.brand}><div className={styles.logo}><PencilLine size={21}/></div><div><strong>Текст на странице</strong><span>Визуальный редактор</span></div></div>
       <div className={styles.headerActions}>
@@ -243,7 +244,7 @@ export default function EditorPage() {
       <aside className={styles.panel} ref={panelRef} aria-label="Редактор выбранного текста">
         <div className={styles.panelHeading}><span className={styles.eyebrow}>{tab==="charts"?"ГРАФИКИ НА СТРАНИЦЕ":"ВЫБРАННЫЙ ФРАГМЕНТ"}</span><h1>{tab==="charts"?"Данные графика":selected?.kind||"Выберите текст"}</h1><p>{tab==="charts"?"Меняйте значения вместе с диаграммой.":selected?"Правьте здесь или прямо на странице.":"Нажмите на любой текст страницы."}</p></div>
         <Tabs value={tab} onValueChange={setTab} className={styles.tabs}>
-          <TabsList className={styles.tabList}><TabsTrigger value="text"><PencilLine size={15}/>Текст</TabsTrigger><TabsTrigger value="ai"><Sparkles size={15}/>С ИИ</TabsTrigger><TabsTrigger value="charts"><BarChart3 size={15}/>Графики</TabsTrigger></TabsList>
+          <TabsList className={styles.tabList}><TabsTrigger value="text"><PencilLine size={15}/>Текст</TabsTrigger>{!githubPages&&<TabsTrigger value="ai"><Sparkles size={15}/>С ИИ</TabsTrigger>}<TabsTrigger value="charts"><BarChart3 size={15}/>Графики</TabsTrigger></TabsList>
           <TabsContent value="text" className={styles.tabContent}>
             <label htmlFor="selected-text" className={styles.fieldLabel}>Текст на странице</label>
             <Textarea id="selected-text" value={selected?.text||""} disabled={!selected} onChange={event=>selected&&updateText(selected.id,event.target.value)} className={styles.textEditor} placeholder="Выберите текст на странице" spellCheck/>
@@ -251,7 +252,7 @@ export default function EditorPage() {
             {selected&&model.charts.items.some(g=>g.points.length)&&(numericSelection!==null||linkedNumber)&&<div className={styles.chartBinding}><label htmlFor="text-chart-link"><Link2 size={14}/>График для этого числа</label><Select value={linkedNumber?linkedNumber.chart.id+":"+linkedNumber.index:"none"} onValueChange={changeLink}><SelectTrigger id="text-chart-link"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="none">Без связи с графиком</SelectItem>{model.charts.items.flatMap(g=>g.points.map((p,index)=><SelectItem key={g.id+":"+index} value={g.id+":"+index}>{g.name} · {p.series?p.series+" / ":""}{p.label}</SelectItem>))}</SelectContent></Select><p>{linkedNumber?"Изменение числа обновляет диаграмму.":"Выберите категорию графика, которую должно обновлять это число."}</p></div>}
             <div className={styles.tip}><div className={styles.tipIcon}><MousePointer2 size={17}/></div><p>Заголовки, абзацы, подписи и ячейки таблиц — просто нажмите на нужный текст.</p></div>
           </TabsContent>
-          <TabsContent value="ai" className={styles.tabContent}>
+          {!githubPages&&<TabsContent value="ai" className={styles.tabContent}>
             <div className={styles.selectedExcerpt}>{selected?.text||"Сначала выберите текст на странице."}</div>
             <label htmlFor="ai-instruction" className={styles.fieldLabel}>Что изменить?</label>
             <Textarea id="ai-instruction" value={instruction} onChange={event=>setInstruction(event.target.value)} placeholder="Например: сократи вдвое и сохрани все цифры" className={styles.prompt} disabled={busy}/>
@@ -261,6 +262,7 @@ export default function EditorPage() {
             {aiError&&<p className={styles.aiError} role="alert">{aiError}</p>}
             {proposal&&proposal.id===selectedId&&<div className={styles.proposal}><div className={styles.proposalHeading}><Sparkles size={15}/><strong>Вариант ИИ</strong></div><p>{proposal.text}</p>{!validProposal&&<p className={styles.stale}>Исходный текст уже изменился. Запросите новый вариант.</p>}<div className={styles.proposalActions}><Button size="sm" disabled={!validProposal} onClick={()=>{if(validProposal&&proposal){if(updateText(proposal.id,proposal.text))setProposal(null);}}}><Check size={15}/>Применить</Button><Button variant="ghost" size="sm" onClick={()=>setProposal(null)}>Оставить мой текст</Button></div></div>}
           </TabsContent>
+          }
           <TabsContent value="charts" className={styles.tabContent}><ChartEditor model={model} selectedId={selectedChartId} onSelect={id=>selectChart(id,true)} onChange={chartChanged}/></TabsContent>
         </Tabs>
         <div className={styles.panelBottom}><span className={styles.smallLine}></span><p>Правки видны сразу.<br/><strong>Страницу можно скачать.</strong></p></div>

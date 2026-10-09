@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "node --import tsx server.ts --dev",
     "build": "tsc --noEmit && node sites/build.mjs",
+    "build:pages": "tsc --noEmit && vite build --mode github-pages --outDir dist-pages",
     "start": "node --import tsx server.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
