@@ -1,5 +1,8 @@
 node_modules/
 dist/
+.sites-build/
+.sites-runtime/
+sites/generated-assets.ts
 .env
 .env.*
 !.env.example

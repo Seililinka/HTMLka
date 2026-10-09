@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/Tabs";
 import { HtmlTextDocument } from "../helpers/HtmlTextDocument";
 import { sampleDocument } from "../helpers/sampleDocument";
+import { useEditorTools } from "../helpers/useEditorTools";
 import styles from "./_index.module.css";
 
 type Proposal = {id: string; identity: string; base: string; text: string};
@@ -44,6 +45,8 @@ export default function EditorPage() {
   modeRef.current = mode;
   selectedRef.current = selectedId;
   const selected = model.get(selectedId);
+  useEditorTools({ filename, fragmentCount:model.entries.length, chartCount:model.charts.items.length,
+    selected:selected ? { id:selected.id, kind:selected.kind, text:selected.text } : null });
   const words = selected?.text.trim().split(/\s+/).filter(Boolean).length || 0;
   const numericSelection=selected ? model.charts.parseNumber(selected.text) : null;
   const linkedNumber=model.charts.links(selectedId).find(o=>o.point.valueTextId===selectedId||o.point.valueAliases?.includes(selectedId));

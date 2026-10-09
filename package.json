@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "node --import tsx server.ts --dev",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && node sites/build.mjs",
     "start": "node --import tsx server.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

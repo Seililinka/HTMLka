@@ -42,7 +42,7 @@ async function api(req:IncomingMessage,res:ServerResponse){
   });
   await send(await handle(request),res);
 }
-const dist=resolve(root,"dist");
+const dist=resolve(root,existsSync(resolve(root,"dist/client/index.html"))?"dist/client":"dist");
 async function staticFile(req:IncomingMessage,res:ServerResponse){
   if(!["GET","HEAD"].includes(req.method || "")){res.writeHead(405);res.end();return;}
   let pathname:string;

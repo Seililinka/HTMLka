@@ -27,6 +27,7 @@
     "endpoints",
     "main.tsx",
     "server.ts",
+    "sites/worker.ts",
     "vite.config.ts",
     "vitest.config.ts"
   ],
