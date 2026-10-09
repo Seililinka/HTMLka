@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;450;500;600;650;700&family=Noto+Serif:wght@500;600&display=swap');
+:root {
+  /* Overlay layers */
+  --z-overlay: 400;
+
+  --z-spotlight: 1000; /* Tutorial spotlights/guided help */
+
+  /* System layers */
+  --z-critical: 2000; /* Critical system notifications */
+
+  /* spacing */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+}
+:root {
+  --background: #eef1f6;
+  --foreground: #202735;
+  --surface: #fdfdff;
+  --surface-foreground: #202735;
+  --sidebar: #fdfdff;
+  --sidebar-foreground: #202735;
+  --card: #fdfdff;
+  --card-foreground: #202735;
+  --popup: #fdfdff;
+  --popup-foreground: #202735;
+  --primary: #304cdb;
+  --primary-foreground: #ffffff;
+  --secondary: #eef1fc;
+  --secondary-foreground: #304cdb;
+  --accent: #e9edfc;
+  --accent-foreground: #263fbf;
+  --muted: #f2f4f8;
+  --muted-foreground: #6b7385;
+  --success: #147c53;
+  --success-foreground: #ffffff;
+  --error: #c03d4b;
+  --error-foreground: #ffffff;
+  --warning: #a66215;
+  --warning-foreground: #ffffff;
+  --info: #304cdb;
+  --info-foreground: #ffffff;
+  --info-hover: #253fc4;
+  --info-active: #2036a9;
+  --border: #dce1eb;
+  --font-family-base: 'Golos Text', system-ui, sans-serif;
+  --font-family-display: 'Noto Serif', Georgia, serif;
+  --font-family-monospace: ui-monospace, monospace;
+  --font-family-cursive: cursive;
+  --shadow: 0 2px 8px rgb(30 43 74 / 4%);
+  --shadow-md: 0 8px 32px rgb(30 43 74 / 7%);
+  --shadow-lg: 0 20px 60px rgb(30 43 74 / 12%);
+  --shadow-focus: 0 0 0 3px rgb(48 76 219 / 15%);
+  --radius-sm: 5px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+  --animation-duration-fast: 120ms;
+  --animation-duration-normal: 200ms;
+  --animation-duration-slow: 350ms;
+  --chart-color-1: #304cdb;
+  --chart-color-2: #8193e7;
+  --chart-color-3: #bec9ef;
+  --chart-color-4: #526482;
+  --chart-color-5: #dce1eb;
+}
+.dark {}
