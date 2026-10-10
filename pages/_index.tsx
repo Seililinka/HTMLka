@@ -13,7 +13,11 @@ import styles from "./_index.module.css";
 
 type Proposal = {id: string; identity: string; base: string; text: string};
 const githubPages = import.meta.env.MODE === "github-pages";
+// A fixed public counter key; no document data is included in this URL.
+const visitCounterUrl = "https://hits.sh/seililinka.github.io/HTMLka.svg?label=" + encodeURIComponent("Открытий") + "&color=44786b&labelColor=66736d";
 export default function EditorPage() {
+  const showVisitCounter = githubPages && typeof window !== "undefined" && window.location.origin === "https://seililinka.github.io" && /^\/HTMLka(?:\/(?:index\.html)?)?$/.test(window.location.pathname);
+  const [counterStatus,setCounterStatus] = useState<"loading" | "ready" | "error">("loading");
   const [model,setModel] = useState(() => new HtmlTextDocument(sampleDocument));
   const [frameHtml,setFrameHtml] = useState(() => model.preview());
   const [frameVersion,setFrameVersion] = useState(0);
@@ -240,6 +244,17 @@ export default function EditorPage() {
         <div className={styles.canvasHeading}><span>{mode==="edit"?"Нажмите на текст, чтобы изменить его":"Просмотр страницы"}</span><span className={styles.pageBadge}>СТРАНИЦА 01</span></div>
         <div className={styles.paper}><iframe key={model.identity+":"+frameVersion} ref={frameRef} title="Готовая HTML-страница" sandbox="allow-same-origin" srcDoc={frameHtml} onLoad={loadFrame}/></div>
         <div className={styles.canvasFooter}><ShieldCheck size={14}/><span>Файл открывается на вашем устройстве</span><span className={styles.footerCount}>{model.dirtyCount?model.dirtyCount+" фрагм. изменено":"Без изменений"}</span></div>
+        {showVisitCounter&&<div className={styles.visitCounter} aria-label="Посещения приложения">
+          <div className={styles.visitBadge}>
+            {counterStatus!=="ready"&&<span>{counterStatus==="error"?"Счётчик недоступен":"Открытий: …"}</span>}
+            {counterStatus!=="error"&&<img src={visitCounterUrl} alt="Общее число открытий HTMLka" referrerPolicy="no-referrer" className={counterStatus==="ready"?styles.counterImage:styles.counterLoading} onLoad={()=>setCounterStatus("ready")} onError={()=>setCounterStatus("error")}/>}
+          </div>
+          <details className={styles.visitInfo}>
+            <summary>О счётчике</summary>
+            <p>Общее число открытий приложения с 10 октября 2026 года, включая повторные открытия и проверки. Это не число уникальных людей. Сервис Hits.sh получает запрос и IP-адрес, но не содержимое или название вашего HTML. Если счётчик недоступен, редактор продолжает работать.</p>
+            <a href="https://hits.sh/seililinka.github.io/HTMLka/" target="_blank" rel="noopener noreferrer">Статистика по дням</a>
+          </details>
+        </div>}
       </section>
       <aside className={styles.panel} ref={panelRef} aria-label="Редактор выбранного текста">
         <div className={styles.panelHeading}><span className={styles.eyebrow}>{tab==="charts"?"ГРАФИКИ НА СТРАНИЦЕ":"ВЫБРАННЫЙ ФРАГМЕНТ"}</span><h1>{tab==="charts"?"Данные графика":selected?.kind||"Выберите текст"}</h1><p>{tab==="charts"?"Меняйте значения вместе с диаграммой.":selected?"Правьте здесь или прямо на странице.":"Нажмите на любой текст страницы."}</p></div>
